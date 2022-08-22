@@ -5,16 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="shortcut icon" href="frontend/images/favicon.ico" type="image/x-icon">
+  <!-- <link rel="shortcut icon" href="frontend/images/favicon.ico" type="image/x-icon"> -->
   <!-- Styles -->
   <link rel="stylesheet" href="frontend/vendors/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="frontend/vendors/fontawesome/css/all.min.css">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css">
   <link rel="stylesheet" href="frontend/vendors/aos/aos.css">
-  
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css' rel='stylesheet' />
-
+  <link rel="stylesheet" href="frontend/vendors/leaflet/leaflet.css">
+  <link rel="stylesheet" href="frontend/styles/map.css">
   <!-- <link rel="stylesheet" href="frontend/styles/main.css"> -->
   <!-- End of styles -->
 </head>
@@ -42,8 +40,8 @@
                   Lokasi <strong>A</strong>
                 </label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Latitude" readonly>
-                  <input type="text" class="form-control" placeholder="Longitude" readonly>
+                  <input id="latA" type="text" class="form-control" placeholder="Latitude" readonly>
+                  <input id="lngA" type="text" class="form-control" placeholder="Longitude" readonly>
                 </div>
               </div>
               <div class="col-md-6">
@@ -52,12 +50,12 @@
                   Lokasi <strong>B</strong>
                 </label>
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Latitude" readonly>
-                  <input type="text" class="form-control" placeholder="Longitude" readonly>
+                  <input id="latB" type="text" class="form-control" placeholder="Latitude" readonly>
+                  <input id="lngB" type="text" class="form-control" placeholder="Longitude" readonly>
                 </div>
               </div>
             </div>
-            <div id='map' style='width: 100%; height: 500px;'></div>
+            <div id="map"></div>
           </div>
         </div>
       </div>
@@ -71,15 +69,15 @@
             </h5>
             <div class="mb-3">
               <label class="form-label text-muted">Euclidean Distance</label>
-              <input type="text" class="form-control" readonly>
+              <input id="euclidean" type="text" class="form-control" readonly>
             </div>
             <div class="mb-3">
               <label class="form-label text-muted">Spherical Law of Cosines</label>
-              <input type="text" class="form-control" readonly>
+              <input id="spherical" type="text" class="form-control" readonly>
             </div>
             <div class="mb-3">
               <label class="form-label text-muted">Haversine Formula</label>
-              <input type="text" class="form-control" readonly>
+              <input id="haversine" type="text" class="form-control" readonly>
             </div>
           </div>
         </div>
@@ -91,6 +89,7 @@
   <!-- Scripts -->
   <script src="frontend/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="frontend/vendors/aos/aos.js"></script>
+  <script src="frontend/vendors/leaflet/leaflet.js"></script>
   <script src="frontend/scripts/main.js"></script>
   <!-- End of scripts -->
 </body>
