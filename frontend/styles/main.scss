@@ -1,0 +1,66 @@
+@import 'fonts'; 
+@import 'variables'; 
+
+/*==============================================================
+	Common Styles Initials
+==============================================================*/
+body {
+  background: $color-1;
+  font-family: $font-1;
+}
+/*==============================================================
+	Common Styles End
+==============================================================*/
+/*==============================================================
+	Global Styles Start
+==============================================================*/
+.h1{
+	font-size: 40px;
+	font-weight: 700;
+	line-height: 1.3;
+	font-family: $font-1;
+	color: $black;
+}
+.h2{
+	font-size: 28px;
+	font-weight: 700;
+	line-height: 1.35;
+	font-family: $font-1;
+	color: $black;
+}
+.h3{
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1.5;
+	color: $black;
+	font-family: $font-1;
+}
+.h4,
+.page-header h4{
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.35;
+	color: $black;
+	font-family: $font-1;
+}
+.h5{
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: $black;
+	font-family: $font-1;
+}
+/*==============================================================
+	Global Styles End
+==============================================================*/
+/*==============================================================
+	Login Page Start
+==============================================================*/
+
+/*==============================================================
+	Login Page End
+==============================================================*/
+// MOBILE
+@media (max-width: 992px) {
+  @import 'mobile';  
+}
