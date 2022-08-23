@@ -36,15 +36,23 @@ L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
 }).addTo(map);
 
 var aIcon = L.icon({
-  iconUrl: 'frontend/images/marker-a.png',
-  iconSize:     [37, 47],
-  iconAnchor:   [18, 45],
+  iconUrl: 'frontend/images/marker-icon-a.png',
+  shadowUrl: 'frontend/images/marker-shadow.png',
+
+  iconSize:     [33, 42],
+  shadowSize:   [50, 64],
+  iconAnchor:   [16, 42],
+  shadowAnchor: [16, 63],
   popupAnchor:  [-3, -76]
 });
 var bIcon = L.icon({
-  iconUrl: 'frontend/images/marker-b.png',
-  iconSize:     [37, 47],
-  iconAnchor:   [18, 45],
+  iconUrl: 'frontend/images/marker-icon-b.png',
+  shadowUrl: 'frontend/images/marker-shadow.png',
+
+  iconSize:     [33, 42],
+  shadowSize:   [50, 64],
+  iconAnchor:   [16, 42],
+  shadowAnchor: [16, 63],
   popupAnchor:  [-3, -76]
 });
 
@@ -102,14 +110,35 @@ markerB.on('move', function(e) {
   );
 });
 
-function euclidean (x1, y1, x2, y2) {
-  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+console.log(euclidean(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng));
+console.log(spherical(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng));
+console.log(haversine(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng));
+
+function euclidean(lat1, lon1, lat2, lon2) {
+  return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2)) * 100000;
 }
-function spherical (x1, y1, x2, y2) {
-  return Math.acos(Math.sin(x1) * Math.sin(x2) + Math.cos(x1) * Math.cos(x2) * Math.cos(y2 - y1));
+
+function spherical(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180
+  const d = Math.acos(Math.sin(φ1) * Math.sin(φ2) + Math.cos(φ1) * Math.cos(φ2) * Math.cos(Δλ)) * R;
+
+  return d;
 }
-function haversine (x1, y1, x2, y2) {
-  return 2 * Math.asin(Math.sqrt(Math.pow(Math.sin((x1 - x2) / 2), 2) + Math.cos(x1) * Math.cos(x2) * Math.pow(Math.sin((y1 - y2) / 2), 2)));
+
+// calculate distance between two points in latitude and longitude using haversine formula
+function haversine(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of earth in KM
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLon = (lon2 - lon1) * Math.PI / 180;
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  var d = R * c;
+  return d * 1000; // meters
 }
 
 function showResult(euclideanResult, sphericalResult, haversineResult) {
@@ -119,12 +148,10 @@ function showResult(euclideanResult, sphericalResult, haversineResult) {
 }
 
 function normalize(x) {
-  result = x * 100;
-  if (result < 1) {
-    result *= 1000;
-    return result.toFixed() + ' m';
+  if (x >= 1000) {
+    return (x / 1000).toFixed(3) + ' km';
   } else {
-    return result.toFixed(3) + ' km'; 
+    return x.toFixed(1) + ' m';
   }
 }
 
