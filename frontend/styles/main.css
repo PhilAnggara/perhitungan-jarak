@@ -5,7 +5,7 @@
 ==============================================================*/
 body {
   background: #edf7fa;
-  font-family: "Assistant", sans-serif;
+  font-family: "Ubuntu", sans-serif;
 }
 
 /*==============================================================
@@ -38,8 +38,7 @@ body {
   font-family: "Assistant", sans-serif;
 }
 
-.h4,
-.page-header h4 {
+.h4 {
   font-size: 20px;
   font-weight: 700;
   line-height: 1.35;
@@ -53,6 +52,10 @@ body {
   line-height: 1.35;
   color: #000;
   font-family: "Assistant", sans-serif;
+}
+
+#map {
+  height: 500px;
 }
 
 /*==============================================================

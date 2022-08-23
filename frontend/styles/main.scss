@@ -6,7 +6,7 @@
 ==============================================================*/
 body {
   background: $color-1;
-  font-family: $font-1;
+  font-family: $font-2;
 }
 /*==============================================================
 	Common Styles End
@@ -35,8 +35,7 @@ body {
 	color: $black;
 	font-family: $font-1;
 }
-.h4,
-.page-header h4{
+.h4{
 	font-size: 20px;
 	font-weight: 700;
 	line-height: 1.35;
@@ -49,6 +48,9 @@ body {
 	line-height: 1.35;
 	color: $black;
 	font-family: $font-1;
+}
+#map {
+  height: 500px;
 }
 /*==============================================================
 	Global Styles End

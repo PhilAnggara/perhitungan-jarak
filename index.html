@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <!-- <link rel="shortcut icon" href="frontend/images/favicon.ico" type="image/x-icon"> -->
+  <title>Perhitungan Jarak</title>
+  <link rel="shortcut icon" href="frontend/images/favicon.ico" type="image/x-icon">
   <!-- Styles -->
   <link rel="stylesheet" href="frontend/vendors/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="frontend/vendors/fontawesome/css/all.min.css">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css">
   <link rel="stylesheet" href="frontend/vendors/aos/aos.css">
   <link rel="stylesheet" href="frontend/vendors/leaflet/leaflet.css">
-  <link rel="stylesheet" href="frontend/styles/map.css">
-  <!-- <link rel="stylesheet" href="frontend/styles/main.css"> -->
+  <link rel="stylesheet" href="frontend/styles/main.css">
   <!-- End of styles -->
 </head>
 <body>
@@ -21,8 +20,13 @@
   <nav class="navbar bg-light shadow p-3">
     <div class="container">
       <a data-aos="fade-down" class="navbar-brand fs-4" href="">
-        <i class="fa-duotone fa-map-location-dot text-primary d-inline-block "></i>
-        Perbandingan Metode Perhitungan Jarak Pada <strong><em>On Demand Ambulance</em></strong>
+        <i class="fa-duotone fa-map-location-dot text-primary d-inline-block"></i>
+        <div class="d-none d-md-inline">
+          Perbandingan Metode Perhitungan Jarak Pada <strong><em>On Demand Ambulance</em></strong>
+        </div>
+        <div class="d-inline d-md-none">
+          Perhitungan Jarak
+        </div>
       </a>
     </div>
   </nav>
@@ -30,7 +34,7 @@
   <div class="container mt-5">
     <div class="row">
 
-      <div data-aos="zoom-in" data-aos-delay="200" class="col-8">
+      <div data-aos="zoom-in" data-aos-delay="200" class="col-md-8 mb-3">
         <div class="card shadow rounded-4">
           <div class="card-body">
             <div class="row mb-3">
@@ -39,9 +43,12 @@
                   <i class="fa-duotone fa-location-dot text-primary"></i>
                   Lokasi <strong>A</strong>
                 </label>
-                <div class="input-group">
+                <div class="input-group input-group-sm mb-2">
                   <input id="latA" type="text" class="form-control" placeholder="Latitude" readonly>
                   <input id="lngA" type="text" class="form-control" placeholder="Longitude" readonly>
+                  <button id="copyA" class="btn btn-secondary" type="button" onclick="copyToClipboard('latA', 'lngA')">
+                    <i class="fa-light fa-clipboard"></i>
+                  </button>
                 </div>
               </div>
               <div class="col-md-6">
@@ -49,9 +56,12 @@
                   <i class="fa-duotone fa-location-dot text-danger"></i>
                   Lokasi <strong>B</strong>
                 </label>
-                <div class="input-group">
+                <div class="input-group input-group-sm mb-2">
                   <input id="latB" type="text" class="form-control" placeholder="Latitude" readonly>
                   <input id="lngB" type="text" class="form-control" placeholder="Longitude" readonly>
+                  <button id="copyB" class="btn btn-secondary" type="button" onclick="copyToClipboard('latB', 'lngB')">
+                    <i class="fa-light fa-clipboard"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -60,7 +70,7 @@
         </div>
       </div>
 
-      <div data-aos="fade-left" data-aos-delay="300" class="col-4">
+      <div data-aos="fade-left" data-aos-delay="300" class="col-md-4 mb-3">
         <div class="card shadow rounded-4">
           <div class="card-body">
             <h5 class="card-title">
@@ -83,6 +93,34 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToastA" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">
+          <i class="fa-duotone fa-location-dot text-primary"></i>
+          Lokasi <strong>A</strong>
+        </strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Disalin ke papan klip!
+      </div>
+    </div>
+    
+    <div id="liveToastB" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">
+          <i class="fa-duotone fa-location-dot text-danger"></i>
+          Lokasi <strong>B</strong>
+        </strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Disalin ke papan klip!
+      </div>
     </div>
   </div>
 

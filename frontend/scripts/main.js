@@ -4,6 +4,25 @@ AOS.init({
   duration: 600
 });
 
+const toastTriggerA = document.getElementById('copyA')
+const toastLiveExampleA = document.getElementById('liveToastA')
+if (toastTriggerA) {
+  toastTriggerA.addEventListener('click', () => {
+    const toast = new bootstrap.Toast(toastLiveExampleA)
+
+    toast.show()
+  })
+}
+const toastTriggerB = document.getElementById('copyB')
+const toastLiveExampleB = document.getElementById('liveToastB')
+if (toastTriggerB) {
+  toastTriggerB.addEventListener('click', () => {
+    const toast = new bootstrap.Toast(toastLiveExampleB)
+
+    toast.show()
+  })
+}
+
 
 // Hybrid: s,h;
 // Satellite: s;
@@ -16,10 +35,25 @@ L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
   subdomains:['mt0','mt1','mt2','mt3']
 }).addTo(map);
 
+var aIcon = L.icon({
+  iconUrl: 'frontend/images/marker-a.png',
+  iconSize:     [37, 47],
+  iconAnchor:   [18, 45],
+  popupAnchor:  [-3, -76]
+});
+var bIcon = L.icon({
+  iconUrl: 'frontend/images/marker-b.png',
+  iconSize:     [37, 47],
+  iconAnchor:   [18, 45],
+  popupAnchor:  [-3, -76]
+});
+
 var markerA = L.marker([1.5049181818799706, 124.87268109746775], {
+  icon: aIcon,
   draggable: true,
 }).addTo(map);
 var markerB = L.marker([1.4907184564345943, 124.83914510504695], {
+  icon: bIcon,
   draggable: true,
 }).addTo(map);
 var polygon = L.polygon([
@@ -92,4 +126,10 @@ function normalize(x) {
   } else {
     return result.toFixed(3) + ' km'; 
   }
+}
+
+function copyToClipboard(latId, lngId) {
+  var lat = document.getElementById(latId);
+  var lng = document.getElementById(lngId);
+  navigator.clipboard.writeText(lat.value + ',' + lng.value);
 }
