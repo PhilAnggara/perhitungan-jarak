@@ -66,24 +66,42 @@
         </div>
       </div>
 
-      <div data-aos="zoom-in" data-aos-delay="300" class="col-md-4 mb-3">
-        <div class="card shadow rounded-4">
-          <div class="card-body">
-            <h5 class="card-title">
-              <i class="fa-regular fa-square-poll-horizontal text-success"></i>
-              Hasil Perhitungan
-            </h5>
-            <div class="mb-3">
-              <label class="form-label text-muted">Euclidean Distance</label>
-              <input id="euclidean" type="text" class="form-control" readonly>
+      <div class="col-md-4 mb-3">
+        <div class="row">
+          <div data-aos="zoom-in" data-aos-delay="300"  class="col-12">
+            <div class="card shadow rounded-4">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-regular fa-square-poll-horizontal text-success"></i>
+                  Hasil Perhitungan
+                </h5>
+                <div class="mb-3">
+                  <label class="form-label text-muted">Euclidean Distance</label>
+                  <input id="euclidean" type="text" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted">Spherical Law of Cosines</label>
+                  <input id="spherical" type="text" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label text-muted">Haversine Formula</label>
+                  <input id="haversine" type="text" class="form-control" readonly>
+                </div>
+              </div>
+              <!-- <div class="card-footer text-center">
+                <small class="text-muted fw-light">Waktu Eksekusi : <span id="time" class="fw-normal"></span> ms</small>
+              </div> -->
             </div>
-            <div class="mb-3">
-              <label class="form-label text-muted">Spherical Law of Cosines</label>
-              <input id="spherical" type="text" class="form-control" readonly>
-            </div>
-            <div class="mb-3">
-              <label class="form-label text-muted">Haversine Formula</label>
-              <input id="haversine" type="text" class="form-control" readonly>
+          </div>
+          <div data-aos="zoom-in" data-aos-delay="400"  class="col-12 mt-3">
+            <div class="card shadow rounded-4">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-regular fa-chart-column text-warning"></i>
+                  Grafik
+                </h5>
+                <div id="chart"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -105,7 +123,6 @@
         Disalin ke papan klip!
       </div>
     </div>
-    
     <div id="liveToastB" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
         <strong class="me-auto">
@@ -124,6 +141,8 @@
   <script src="frontend/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="frontend/vendors/aos/aos.js"></script>
   <script src="frontend/vendors/leaflet/leaflet.js"></script>
+  <script src="frontend/vendors/apexcharts/apexcharts.js"></script>
+  <script src="frontend/scripts/chart.js"></script>
   <script src="frontend/scripts/calculation.js"></script>
   <script src="frontend/scripts/main.js"></script>
   <!-- End of scripts -->

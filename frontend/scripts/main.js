@@ -133,8 +133,6 @@ function setLocationName(lat, lng, input) {
   });
 }
 
-// calculate distance between two points in km
-
 function searchLocation(inputId, suggestionId) {
   
   const input = document.getElementById(inputId);
@@ -203,12 +201,10 @@ function selectLocation(lat, lng, text, inputId) {
 }
 
 document.addEventListener('click', function handleClickOutsideBox(event) {
-  // const box = document.getElementById('box');
-
+  // const box = document.getElementById('suggestionA');
   // if (!box.contains(event.target)) {
-  //   box.style.display = 'none';
+  //   box.classList.add('d-none');
   // }
-  console.log('click');
   document.getElementById('suggestionA').classList.add('d-none');
   document.getElementById('suggestionB').classList.add('d-none');
 });

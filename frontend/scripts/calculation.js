@@ -38,8 +38,17 @@ function normalize(x) {
   }
 }
 
+function normalizeChart(x) {
+  return (x / 1000).toFixed(2) + ' km';
+}
+
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  euclidean(lat1, lon1, lat2, lon2);
-  spherical(lat1, lon1, lat2, lon2);
-  haversine(lat1, lon1, lat2, lon2);
+  chart.updateSeries([{
+    data: [
+      normalizeChart(euclidean(lat1, lon1, lat2, lon2)),
+      normalizeChart(spherical(lat1, lon1, lat2, lon2)),
+      normalizeChart(haversine(lat1, lon1, lat2, lon2)),
+      normalizeChart(map.distance(markerA.getLatLng(), markerB.getLatLng()))
+    ]
+  }]);
 }
