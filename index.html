@@ -37,35 +37,30 @@
       <div data-aos="zoom-in" data-aos-delay="200" class="col-md-8 mb-3">
         <div class="card shadow rounded-4">
           <div class="card-body">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label class="form-label">
+            <div class="row">
+              <div class="input-group">
+                <span class="input-group-text bg-white">
                   <i class="fa-duotone fa-location-dot text-primary"></i>
-                  Lokasi <strong>A</strong>
-                </label>
-                <div class="input-group input-group-sm mb-2">
-                  <input id="latA" type="text" class="form-control" placeholder="Latitude" readonly>
-                  <input id="lngA" type="text" class="form-control" placeholder="Longitude" readonly>
-                  <button id="copyA" class="btn btn-secondary" type="button" onclick="copyToClipboard('latA', 'lngA')">
-                    <i class="fa-light fa-clipboard"></i>
-                  </button>
-                </div>
+                </span>
+                <input id="inputA" type="search" class="form-control" placeholder="Lokasi A" oninput="searchLocation('inputA', 'suggestionA')" autocomplete="off">
+                <button class="btn btn-outline-primary" type="button" onclick="getUserLocation()">
+                  <i class="fa-light fa-location-crosshairs"></i>
+                </button>
               </div>
-              <div class="col-md-6">
-                <label class="form-label">
+              <div class="col-12 position-relative">
+                <div id="suggestionA" class="list-group shadow position-absolute top-0 start-50 translate-middle-x"></div>
+              </div>
+              <div class="input-group mt-3">
+                <span class="input-group-text bg-white">
                   <i class="fa-duotone fa-location-dot text-danger"></i>
-                  Lokasi <strong>B</strong>
-                </label>
-                <div class="input-group input-group-sm mb-2">
-                  <input id="latB" type="text" class="form-control" placeholder="Latitude" readonly>
-                  <input id="lngB" type="text" class="form-control" placeholder="Longitude" readonly>
-                  <button id="copyB" class="btn btn-secondary" type="button" onclick="copyToClipboard('latB', 'lngB')">
-                    <i class="fa-light fa-clipboard"></i>
-                  </button>
-                </div>
+                </span>
+                <input id="inputB" type="search" class="form-control" placeholder="Lokasi B" oninput="searchLocation('inputB', 'suggestionB')" autocomplete="off">
+              </div>
+              <div class="col-12 position-relative">
+                <div id="suggestionB" class="list-group shadow position-absolute top-0 start-50 translate-middle-x"></div>
               </div>
             </div>
-            <div id="map"></div>
+            <div class="mt-3" id="map"></div>
           </div>
         </div>
       </div>
@@ -128,6 +123,7 @@
   <script src="frontend/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="frontend/vendors/aos/aos.js"></script>
   <script src="frontend/vendors/leaflet/leaflet.js"></script>
+  <script src="frontend/scripts/calculation.js"></script>
   <script src="frontend/scripts/main.js"></script>
   <!-- End of scripts -->
 </body>

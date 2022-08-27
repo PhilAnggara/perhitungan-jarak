@@ -54,6 +54,11 @@ body {
   font-family: "Assistant", sans-serif;
 }
 
+.list-group {
+  z-index: 9999;
+  width: 90%;
+}
+
 #map {
   height: 500px;
 }

@@ -49,6 +49,11 @@ body {
 	color: $black;
 	font-family: $font-1;
 }
+
+.list-group {
+	z-index: 9999;
+	width: 90%;
+}
 #map {
   height: 500px;
 }
