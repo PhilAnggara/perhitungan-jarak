@@ -1,0 +1,152 @@
+[
+  {
+      "id": 1,
+      "namaInstansi": "RS Budi Mulia Bitung",
+      "kotaKabupaten": "Bitung",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Sam Ratulangi No.9A, Bitung Bar. Satu, Kec. Maesa, Kota Bitung, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Mahesa Adriansyah",
+      "platNomor": "DB 2222 DV",
+      "geopoint": {
+          "_latitude": 1.445412735082457,
+          "_longitude": 125.17893389947045
+      }
+  },
+  {
+      "id": 2,
+      "namaInstansi": "RS Hermina Manado",
+      "kotaKabupaten": "Manado",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Kairagi Dua, Kec. Mapanget, Kota Manado, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Lamar Widodo",
+      "platNomor": "DB 2804 ZS",
+      "geopoint": {
+          "_latitude": 1.4976948351271224,
+          "_longitude": 124.90185080346998
+      }
+  },
+  {
+      "id": 3,
+      "namaInstansi": "Siloam Hospitals Manado",
+      "kotaKabupaten": "Manado",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Sam Ratulangi No.22, Wenang Utara, Kec. Wenang, Kota Manado, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Ganjaran Pranowo",
+      "platNomor": "DB 1704 XT",
+      "geopoint": {
+          "_latitude": 1.4874829796599258,
+          "_longitude": 124.83770335668798
+      }
+  },
+  {
+      "id": 4,
+      "namaInstansi": "Rumah Sakit Advent Manado",
+      "kotaKabupaten": "Manado",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. 14 Februari, Teling Atas, Kec. Wanea, Kota Manado, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Jarwa Sinaga",
+      "platNomor": "DB 9550 OG",
+      "geopoint": {
+          "_latitude": 1.4655546412025593,
+          "_longitude": 124.85036410356474
+      }
+  },
+  {
+      "id": 5,
+      "namaInstansi": "RSUP Prof. Dr. R. D. Kandou Manado",
+      "kotaKabupaten": "Manado",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Raya Tanawangko No.56, Malalayang Satu Barat, Kec. Malalayang, Kota Manado, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Gaiman Jailani",
+      "platNomor": "DB 6325 NF",
+      "geopoint": {
+          "_latitude": 1.454178652468089,
+          "_longitude": 124.80814759472536
+      }
+  },
+  {
+      "id": 6,
+      "namaInstansi": "Rumah Sakit Budi Setia",
+      "kotaKabupaten": "Minahasa",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Melati No.25, Koyawas, Kec. Langowan Bar., Kabupaten Minahasa, Sulawesi Utara 95694",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Ajimin Kusumo",
+      "platNomor": "DB 4908 KH",
+      "geopoint": {
+          "_latitude": 1.1525743758557947,
+          "_longitude": 124.83787351599965
+      }
+  },
+  {
+      "id": 7,
+      "namaInstansi": "RSU GMIM KALOORAN",
+      "kotaKabupaten": "Minahasa Selatan",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Buyungon, Kec. Amurang, Kabupaten Minahasa Selatan, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Emong Narpati",
+      "platNomor": "DB 2642 ML",
+      "geopoint": {
+          "_latitude": 1.1798055770988944,
+          "_longitude": 124.57086085017346
+      }
+  },
+  {
+      "id": 8,
+      "namaInstansi": "RSU HERMANA LEMBEAN",
+      "kotaKabupaten": "Minahasa Utara",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Lembean,Kauditan, Kabupaten Minahasa Utara, Sulawesi Utara, Lembean, Kec. Kauditan, Kauditan, Sulawesi Utara 95372",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Simon Pradana",
+      "platNomor": "DB 4906 KM",
+      "geopoint": {
+          "_latitude": 1.4021489888707692,
+          "_longitude": 125.00333777014642
+      }
+  },
+  {
+      "id": 9,
+      "namaInstansi": "Gunung Maria Hospital",
+      "kotaKabupaten": "Tomohon",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Sejahtera No.282, Kolongan, Kec. Tomohon Tengah, Kota Tomohon, Sulawesi Utara",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Dadap Waluyo",
+      "platNomor": "DB 6593 SK",
+      "geopoint": {
+          "_latitude": 1.320875400491686,
+          "_longitude": 124.83568298399791
+      }
+  },
+  {
+      "id": 10,
+      "namaInstansi": "Rumah Sakit Umum GMIM Bethesda Tomohon",
+      "kotaKabupaten": "Tomohon",
+      "provinsi": "Sulawesi Utara",
+      "alamatDaerahOperasiAmbulance": "Jl. Raya Tomohon, Talete Satu, Tomohon, Kota Tomohon, Sulawesi Utara 95442",
+      "kontakPicAmbulance": "+6281234567891",
+      "keterangan": "undefined",
+      "namaDriver": "Karya Thamrin",
+      "platNomor": "DB 6319 AN",
+      "geopoint": {
+          "_latitude": 1.326788121130372,
+          "_longitude": 124.83867449438354
+      }
+  }
+]

@@ -13,7 +13,7 @@ L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
 
 var aIcon = L.icon({
   iconUrl: 'frontend/images/marker-icon-a.png',
-  shadowUrl: 'frontend/images/marker-shadow-2x.png',
+  shadowUrl: 'frontend/images/marker-shadow.png',
   iconSize:     [33, 42],
   shadowSize:   [50, 64],
   iconAnchor:   [16, 42],
@@ -22,21 +22,12 @@ var aIcon = L.icon({
 });
 var bIcon = L.icon({
   iconUrl: 'frontend/images/marker-icon-b.png',
-  shadowUrl: 'frontend/images/marker-shadow-2x.png',
+  shadowUrl: 'frontend/images/marker-shadow.png',
   iconSize:     [33, 42],
   shadowSize:   [50, 64],
   iconAnchor:   [16, 42],
   shadowAnchor: [16, 63],
   popupAnchor:  [-3, -76]
-});
-var ambulanceIcon = L.icon({
-  iconUrl: 'frontend/images/marker-icon-ambulance.png',
-  shadowUrl: 'frontend/images/marker-shadow-2x.png',
-  iconSize:     [33, 42],
-  shadowSize:   [50, 64],
-  iconAnchor:   [16, 42],
-  shadowAnchor: [16, 63],
-  popupAnchor:  [0, -40]
 });
 
 var lokasiA = {
@@ -113,7 +104,6 @@ markerB.on('drag', function(e) {
 });
 
 markerA.on('dragend', function(e) {
-  getAmbulances();
   setLocationName(markerA.getLatLng().lat, markerA.getLatLng().lng, inputA);
   calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng);
 });
@@ -218,25 +208,3 @@ document.addEventListener('click', function handleClickOutsideBox(event) {
   document.getElementById('suggestionA').classList.add('d-none');
   document.getElementById('suggestionB').classList.add('d-none');
 });
-
-
-function getAmbulances() {
-  fetch('storage/data.json')
-  .then(response =>  response.json())
-  .then(data => showAmbulances(data));
-}
-
-function showAmbulances(data) {
-  data.forEach((e, i) => {
-    const ambulancesMarker = [];
-    const distance = map.distance(markerA.getLatLng(), [e.geopoint._latitude, e.geopoint._longitude]);
-    if (distance <= 10000) {
-      const popUp = '<p class="mb-1 fw-bold fs-6 text-center">'+e.namaInstansi+'</p><p class="mb-0 fw-bold"><i class="fa-regular fa-truck-medical text-primary"></i> '+e.namaDriver+' <span class="badge text-bg-secondary">'+e.platNomor+'</span></p><p class="mb-1 text-muted"><i class="fa-regular fa-square-phone text-success"></i> '+e.kontakPicAmbulance+'</p><p class="mb-0 text-center"><small>'+(distance/1000).toFixed(2)+' km</small></p>';
-      
-      ambulancesMarker[i] = L.marker([e.geopoint._latitude, e.geopoint._longitude], {
-        icon: ambulanceIcon,
-      }).addTo(map).bindPopup(popUp);
-    }
-    // console.log(ambulancesMarker);
-  });
-}
