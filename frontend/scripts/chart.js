@@ -8,7 +8,7 @@ var chartOptions = {
     data: [0, 0, 0, 0]
   }],
   xaxis: {
-    categories: ['Euclidean Distance','Spherical Law of Cosines','Spherical Law of Cosines', 'Leaflet Distance'],
+    categories: ['Euclidean Distance','Spherical Law of Cosines','Haversine Formula', 'Leaflet Distance'],
     labels: {
       show: false
     }

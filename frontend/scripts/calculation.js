@@ -48,7 +48,24 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
       normalizeChart(euclidean(lat1, lon1, lat2, lon2)),
       normalizeChart(spherical(lat1, lon1, lat2, lon2)),
       normalizeChart(haversine(lat1, lon1, lat2, lon2)),
-      normalizeChart(map.distance(markerA.getLatLng(), markerB.getLatLng()))
+      normalizeChart(map.distance([lat1, lon1], [lat2, lon2]))
     ]
   }]);
+  accuracy(lat1, lon1, lat2, lon2)
+}
+
+function accuracy(lat1, lon1, lat2, lon2) {
+  const a = euclidean(lat1, lon1, lat2, lon2);
+  const b = spherical(lat1, lon1, lat2, lon2);
+  const c = haversine(lat1, lon1, lat2, lon2);
+  const d = L.latLng(lat1, lon1).distanceTo(L.latLng(lat2, lon2));
+  const dd = map.distance([lat1, lon1], [lat2, lon2]);
+  // accuracy of each method in percent
+  const euclideanAccuracy = (a / d) * 100;
+  const sphericalAccuracy = (b / d) * 100;
+  const haversineAccuracy = (c / d) * 100;
+
+  document.getElementById('euclideanAccuracy').value = euclideanAccuracy.toFixed(2) + ' %';
+  document.getElementById('sphericalAccuracy').value = sphericalAccuracy.toFixed(2) + ' %';
+  document.getElementById('haversineAccuracy').value = haversineAccuracy.toFixed(2) + ' %';
 }

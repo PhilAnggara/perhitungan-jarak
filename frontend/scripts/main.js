@@ -5,34 +5,20 @@ AOS.init({
 });
 
 const mapboxAccessToken = 'pk.eyJ1IjoiamVuaWZlcmRhbWFyIiwiYSI6ImNrcTZrYXY2cDFzeXIyb280eTBndTAwMHMifQ.AAdI5SToEU4ITSvEqPcGIA';
-const inputA = document.getElementById("inputA");
-const inputB = document.getElementById("inputB");
-const radius = 10;
-
-let lokasiA = {
-  lat: 1.5049181818799706,
-  lng: 124.87268109746775
-};
-let lokasiB = {
-  lat: 1.4907184564345943,
-  lng: 124.83914510504695
+const input = document.getElementById("locationInput");
+const suggestion = document.getElementById("suggestion");
+const searchRadius = 10; // km
+let defaultLocation = {
+  lat: 1.5044916272099944,
+  lng: 124.87264035846945
 };
 
-var aIcon = L.icon({
+var userIcon = L.icon({
   iconUrl: 'frontend/images/marker-icon-a.png',
   shadowUrl: 'frontend/images/marker-shadow-2x.png',
   iconSize:     [33, 42],
   shadowSize:   [50, 64],
-  iconAnchor:   [16, 42],
-  shadowAnchor: [16, 63],
-  popupAnchor:  [-3, -76]
-});
-var bIcon = L.icon({
-  iconUrl: 'frontend/images/marker-icon-b.png',
-  shadowUrl: 'frontend/images/marker-shadow-2x.png',
-  iconSize:     [33, 42],
-  shadowSize:   [50, 64],
-  iconAnchor:   [16, 42],
+  iconAnchor:   [17, 42],
   shadowAnchor: [16, 63],
   popupAnchor:  [-3, -76]
 });
@@ -41,7 +27,7 @@ var ambulanceIcon = L.icon({
   shadowUrl: 'frontend/images/marker-shadow-2x.png',
   iconSize:     [33, 42],
   shadowSize:   [50, 64],
-  iconAnchor:   [16, 42],
+  iconAnchor:   [17, 42],
   shadowAnchor: [16, 63],
   popupAnchor:  [0, -40]
 });
@@ -53,25 +39,20 @@ L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
   subdomains:['mt0','mt1','mt2','mt3']
 }).addTo(map);
 
-var markerA = L.marker(lokasiA, {
-  icon: aIcon,
+var userMarker = L.marker(defaultLocation, {
+  icon: userIcon,
   draggable: true,
 }).addTo(map);
-var markerB = L.marker(lokasiB, {
-  icon: bIcon,
-  draggable: true,
-}).addTo(map);
-var ambulancesMarkers = L.layerGroup().addTo(map);
-var polygon = L.polygon([lokasiA, lokasiB]).addTo(map);
-var circle = L.circle([lokasiA.lat, lokasiA.lng], {
-  radius: radius * 1000,
+var circle = L.circle(defaultLocation, {
+  radius: searchRadius * 1000,
   weight: 0.5,
 }).addTo(map);
+var ambulancesMarkers = L.layerGroup().addTo(map);
+var polygon;
 
+showAmbulancesInRadius();
+setLocationName();
 getUserLocation();
-setLocationName(lokasiA.lat, lokasiA.lng, inputA);
-setLocationName(lokasiB.lat, lokasiB.lng, inputB);
-refreshMap()
 
 function getUserLocation() {
   if (navigator.geolocation) {
@@ -83,12 +64,12 @@ function getUserLocation() {
   }
 }
 function showPosition(position) {
-  setLocationName(position.coords.latitude, position.coords.longitude, inputA);
-  markerA.setLatLng([position.coords.latitude, position.coords.longitude]);
-  map.flyToBounds([markerA.getLatLng(), markerB.getLatLng()]);
-  polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
+  userMarker.setLatLng([position.coords.latitude, position.coords.longitude]);
   circle.setLatLng([position.coords.latitude, position.coords.longitude]);
-  refreshMap()
+  map.flyTo([position.coords.latitude, position.coords.longitude]);
+  setLocationName();
+  showAmbulancesInRadius()
+  clearCalculate();
 }
 function showError(error) {
   switch(error.code) {
@@ -107,33 +88,8 @@ function showError(error) {
   }
 }
 
-markerA.on('drag', function(e) {
-  findingLocationName(inputA);
-  polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
-  circle.setLatLng([markerA.getLatLng().lat, markerA.getLatLng().lng]);
-});
-markerB.on('drag', function(e) {
-  findingLocationName(inputB);
-  polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
-});
-
-function findingLocationName(input) {
-  input.value = 'Mendapatkan nama lokasi...';
-  input.classList.add('text-muted');
-  input.setAttribute('readonly', 'readonly');
-}
-
-markerA.on('dragend', function(e) {
-  setLocationName(markerA.getLatLng().lat, markerA.getLatLng().lng, inputA);
-  refreshMap()
-});
-markerB.on('dragend', function(e) {
-  setLocationName(markerB.getLatLng().lat, markerB.getLatLng().lng, inputB);
-  refreshMap()
-});
-
-function setLocationName(lat, lng, input) {
-  const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+lng+','+lat+'.json?reverseMode=distance&language=id&access_token='+mapboxAccessToken;
+function setLocationName() {
+  const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+userMarker.getLatLng().lng+','+userMarker.getLatLng().lat+'.json?reverseMode=distance&language=id&access_token='+mapboxAccessToken;
   input.removeAttribute('readonly');
   fetch(url)
   .then(response => {
@@ -147,14 +103,28 @@ function setLocationName(lat, lng, input) {
     input.value = data.features[0].text;
     input.classList.remove('text-muted');
   })
-  .catch(error => {
-    console.log(error);
+  .catch(err => {
+    console.log(err);
   });
 }
 
-function searchLocation(inputId, suggestionId) {
-  const input = document.getElementById(inputId);
-  const suggestion = document.getElementById(suggestionId);
+userMarker.on('drag', function(e) {
+  circle.setLatLng(e.target.getLatLng());
+  input.value = 'Mendapatkan nama lokasi...';
+  input.classList.add('text-muted');
+  input.setAttribute('readonly', 'readonly');
+  if (polygon) {
+    map.removeLayer(polygon);
+  }
+});
+userMarker.on('dragend', function(e) {
+  map.panTo(e.target.getLatLng());
+  setLocationName();
+  showAmbulancesInRadius();
+  clearCalculate();
+});
+
+function searchLocation() {
   const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+input.value+'.json?country=id&limit=10&language=id&access_token='+mapboxAccessToken;
   suggestion.classList.remove('d-none');
   fetch(url)
@@ -166,73 +136,63 @@ function searchLocation(inputId, suggestionId) {
     }
   })
   .then(data => {
-    showSuggestion(data, input, suggestion);
-    console.log(keyword);
+    console.clear();
+    if (input.value !== '') {
+      if (data.features.length > 0) {
+        console.log(data.features);
+        data.features.forEach((e, i) => {
+          console.log(i+1);
+          console.log(e.text);
+          console.log(e.center[1]+', '+e.center[0]);
+          console.log(e);
+        });
+        const html = data.features.map(e => `
+          <button
+            type="button"
+            class="list-group-item list-group-item-action"
+            onclick="selectLocation(${e.center[1]}, ${e.center[0]}, '${e.text}')"
+          >
+            ${e.place_name}
+          </button>
+        `).join('');
+        suggestion.innerHTML = html;
+      } else {
+        console.log('Lokasi tidak ditemukan.');
+        suggestion.innerHTML ='<button type="button" class="list-group-item list-group-item-action text-center" disabled>Lokasi tidak ditemukan.</button>';
+      }
+    } else {
+      suggestion.innerHTML = '';
+    }
   })
-  .catch(error => {
-    console.log(error);
+  .catch(err => {
+    console.log(err);
   });
 }
 
-const showSuggestion = (data, input, suggestion) => {
-  console.clear();
-  if (input.value !== '') {
-    if (data.features.length > 0) {
-      console.log(data.features);
-      data.features.forEach((element, index) => {
-        console.log(index);
-        console.log(element.relevance);
-        console.log(element.place_name);
-        console.log(element.center[1]+', '+element.center[0]);
-      });
-      const html = data.features.map(element => `
-        <button
-          type="button"
-          class="list-group-item list-group-item-action"
-          onclick="selectLocation(${element.center[1]}, ${element.center[0]}, '${element.text}', '${input.id}')"
-        >
-          ${element.place_name}
-        </button>
-      `).join('');
-      suggestion.innerHTML = html;
-    } else {
-      console.log('Lokasi tidak ditemukan.');
-      suggestion.innerHTML ='<button type="button" class="list-group-item list-group-item-action text-center" disabled>Lokasi tidak ditemukan.</button>';
-    }
-  } else {
-    suggestion.innerHTML = '';
-  }
-}
-
-function selectLocation(lat, lng, text, inputId) {
-  const input = document.getElementById(inputId);
+function selectLocation(lat, lng, text) {
   input.value = text;
-  if (inputId === 'inputA') {
-    markerA.setLatLng([lat, lng]);
-  } else {
-    markerB.setLatLng([lat, lng]);
-  }
-  map.flyToBounds([markerA.getLatLng(), markerB.getLatLng()]);
-  polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
-  circle.setLatLng([markerA.getLatLng().lat, markerA.getLatLng().lng]);
-  refreshMap()
+  userMarker.setLatLng([lat, lng]);
+  circle.setLatLng([lat, lng]);
+  map.flyTo([lat, lng]);
+  showAmbulancesInRadius();
+  clearCalculate();
 }
 
-document.addEventListener('click', function handleClickOutsideBox(event) {
-  document.getElementById('suggestionA').classList.add('d-none');
-  document.getElementById('suggestionB').classList.add('d-none');
-});
+document.addEventListener('click', function(e) {
+  suggestion.classList.add('d-none');
+})
 
 function showAmbulancesInRadius() {
   fetch('storage/data.json')
   .then(response =>  response.json())
   .then(data => {
     ambulancesMarkers.clearLayers();
-    data.forEach(e => {
-      const distance = (map.distance(markerA.getLatLng(), [e.geopoint._latitude, e.geopoint._longitude])/1000).toFixed(2);
-      if (distance <= radius) {
+    console.clear();
+    data.forEach((e, i) => {
+      const distance = (map.distance(userMarker.getLatLng(), [e.geopoint._latitude, e.geopoint._longitude])/1000).toFixed(2);
+      if (distance <= searchRadius) {
         const popUp = '<p class="mb-1 fw-bold fs-6 text-center">'+e.namaInstansi+'</p><p class="mb-0 fw-bold"><i class="fa-regular fa-truck-medical text-primary"></i> '+e.namaDriver+' <span class="badge text-bg-secondary">'+e.platNomor+'</span></p><p class="mb-1 text-muted"><i class="fa-regular fa-square-phone text-success"></i> '+e.kontakPicAmbulance+'</p><p class="mb-0 text-center"><small>'+distance+' km</small></p>';
-        
+        console.log(data[i]);
         L.marker([e.geopoint._latitude, e.geopoint._longitude], {
           icon: ambulanceIcon,
         }).bindPopup(popUp).addTo(ambulancesMarkers);
@@ -241,7 +201,28 @@ function showAmbulancesInRadius() {
   });
 }
 
-function refreshMap() {
-  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng)
-  showAmbulancesInRadius();
+map.on('popupopen', function(e) {
+  calculateDistance(userMarker.getLatLng().lat, userMarker.getLatLng().lng, e.popup._source._latlng.lat, e.popup._source._latlng.lng);
+  if (polygon) {
+    map.removeLayer(polygon);
+  }
+  polygon = L.polygon([userMarker.getLatLng(), [e.popup._source._latlng.lat, e.popup._source._latlng.lng]], {
+    color: 'red'
+  }).addTo(map);
+});
+
+function clearCalculate() {
+  if (polygon) {
+    map.removeLayer(polygon);
+  }
+  chart.updateSeries([{
+    data: [0, 0, 0, 0]
+  }]);
+  document.getElementById('euclidean').value = '';
+  document.getElementById('spherical').value = '';
+  document.getElementById('haversine').value = '';
+  
+  document.getElementById('euclideanAccuracy').value = '';
+  document.getElementById('sphericalAccuracy').value = '';
+  document.getElementById('haversineAccuracy').value = '';
 }
