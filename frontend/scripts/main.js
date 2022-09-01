@@ -4,12 +4,19 @@ AOS.init({
   duration: 600
 });
 
-var map = L.map('map').setView([1.4822795012983179, 124.86507303747182], 13);
-L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
-  maxZoom: 20,
-  attribution: '© PhilAnggara',
-  subdomains:['mt0','mt1','mt2','mt3']
-}).addTo(map);
+const mapboxAccessToken = 'pk.eyJ1IjoiamVuaWZlcmRhbWFyIiwiYSI6ImNrcTZrYXY2cDFzeXIyb280eTBndTAwMHMifQ.AAdI5SToEU4ITSvEqPcGIA';
+const inputA = document.getElementById("inputA");
+const inputB = document.getElementById("inputB");
+const radius = 10;
+
+let lokasiA = {
+  lat: 1.5049181818799706,
+  lng: 124.87268109746775
+};
+let lokasiB = {
+  lat: 1.4907184564345943,
+  lng: 124.83914510504695
+};
 
 var aIcon = L.icon({
   iconUrl: 'frontend/images/marker-icon-a.png',
@@ -39,14 +46,12 @@ var ambulanceIcon = L.icon({
   popupAnchor:  [0, -40]
 });
 
-var lokasiA = {
-  lat: 1.5049181818799706,
-  lng: 124.87268109746775
-};
-var lokasiB = {
-  lat: 1.4907184564345943,
-  lng: 124.83914510504695
-};
+var map = L.map('map').setView([1.4822795012983179, 124.86507303747182], 13);
+L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}', {
+  maxZoom: 20,
+  attribution: '© PhilAnggara',
+  subdomains:['mt0','mt1','mt2','mt3']
+}).addTo(map);
 
 var markerA = L.marker(lokasiA, {
   icon: aIcon,
@@ -56,15 +61,17 @@ var markerB = L.marker(lokasiB, {
   icon: bIcon,
   draggable: true,
 }).addTo(map);
+var ambulancesMarkers = L.layerGroup().addTo(map);
 var polygon = L.polygon([lokasiA, lokasiB]).addTo(map);
+var circle = L.circle([lokasiA.lat, lokasiA.lng], {
+  radius: radius * 1000,
+  weight: 0.5,
+}).addTo(map);
 
-
-var inputA = document.getElementById("inputA");
-var inputB = document.getElementById("inputB");
 getUserLocation();
 setLocationName(lokasiA.lat, lokasiA.lng, inputA);
 setLocationName(lokasiB.lat, lokasiB.lng, inputB);
-calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng)
+refreshMap()
 
 function getUserLocation() {
   if (navigator.geolocation) {
@@ -80,7 +87,8 @@ function showPosition(position) {
   markerA.setLatLng([position.coords.latitude, position.coords.longitude]);
   map.flyToBounds([markerA.getLatLng(), markerB.getLatLng()]);
   polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
-  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng)
+  circle.setLatLng([position.coords.latitude, position.coords.longitude]);
+  refreshMap()
 }
 function showError(error) {
   switch(error.code) {
@@ -100,32 +108,33 @@ function showError(error) {
 }
 
 markerA.on('drag', function(e) {
-  inputA.value = 'Mendapatkan nama lokasi...';
-  inputA.classList.add('text-muted');
-  inputA.setAttribute('readonly', 'readonly');
+  findingLocationName(inputA);
   polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
+  circle.setLatLng([markerA.getLatLng().lat, markerA.getLatLng().lng]);
 });
 markerB.on('drag', function(e) {
-  inputB.value = 'Mendapatkan nama lokasi...';
-  inputB.classList.add('text-muted');
-  inputB.setAttribute('readonly', 'readonly');
+  findingLocationName(inputB);
   polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
 });
 
+function findingLocationName(input) {
+  input.value = 'Mendapatkan nama lokasi...';
+  input.classList.add('text-muted');
+  input.setAttribute('readonly', 'readonly');
+}
+
 markerA.on('dragend', function(e) {
-  getAmbulances();
   setLocationName(markerA.getLatLng().lat, markerA.getLatLng().lng, inputA);
-  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng);
+  refreshMap()
 });
 markerB.on('dragend', function(e) {
   setLocationName(markerB.getLatLng().lat, markerB.getLatLng().lng, inputB);
-  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng);
+  refreshMap()
 });
 
 function setLocationName(lat, lng, input) {
+  const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+lng+','+lat+'.json?reverseMode=distance&language=id&access_token='+mapboxAccessToken;
   input.removeAttribute('readonly');
-  var mapboxAccessToken = 'pk.eyJ1IjoiamVuaWZlcmRhbWFyIiwiYSI6ImNrcTZrYXY2cDFzeXIyb280eTBndTAwMHMifQ.AAdI5SToEU4ITSvEqPcGIA';
-  var url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+lng+','+lat+'.json?reverseMode=distance&language=id&access_token='+mapboxAccessToken;
   fetch(url)
   .then(response => {
     if (response.ok) {
@@ -144,12 +153,10 @@ function setLocationName(lat, lng, input) {
 }
 
 function searchLocation(inputId, suggestionId) {
-  
   const input = document.getElementById(inputId);
   const suggestion = document.getElementById(suggestionId);
+  const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+input.value+'.json?country=id&limit=10&language=id&access_token='+mapboxAccessToken;
   suggestion.classList.remove('d-none');
-  var mapboxAccessToken = 'pk.eyJ1IjoiamVuaWZlcmRhbWFyIiwiYSI6ImNrcTZrYXY2cDFzeXIyb280eTBndTAwMHMifQ.AAdI5SToEU4ITSvEqPcGIA';
-  var url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'+input.value+'.json?country=id&limit=10&language=id&access_token='+mapboxAccessToken;
   fetch(url)
   .then(response => {
     if (response.ok) {
@@ -174,9 +181,9 @@ const showSuggestion = (data, input, suggestion) => {
       console.log(data.features);
       data.features.forEach((element, index) => {
         console.log(index);
+        console.log(element.relevance);
         console.log(element.place_name);
         console.log(element.center[1]+', '+element.center[0]);
-        console.log(element.text);
       });
       const html = data.features.map(element => `
         <button
@@ -207,36 +214,34 @@ function selectLocation(lat, lng, text, inputId) {
   }
   map.flyToBounds([markerA.getLatLng(), markerB.getLatLng()]);
   polygon.setLatLngs([markerA.getLatLng(), markerB.getLatLng()]);
-  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng)
+  circle.setLatLng([markerA.getLatLng().lat, markerA.getLatLng().lng]);
+  refreshMap()
 }
 
 document.addEventListener('click', function handleClickOutsideBox(event) {
-  // const box = document.getElementById('suggestionA');
-  // if (!box.contains(event.target)) {
-  //   box.classList.add('d-none');
-  // }
   document.getElementById('suggestionA').classList.add('d-none');
   document.getElementById('suggestionB').classList.add('d-none');
 });
 
-
-function getAmbulances() {
+function showAmbulancesInRadius() {
   fetch('storage/data.json')
   .then(response =>  response.json())
-  .then(data => showAmbulances(data));
+  .then(data => {
+    ambulancesMarkers.clearLayers();
+    data.forEach(e => {
+      const distance = (map.distance(markerA.getLatLng(), [e.geopoint._latitude, e.geopoint._longitude])/1000).toFixed(2);
+      if (distance <= radius) {
+        const popUp = '<p class="mb-1 fw-bold fs-6 text-center">'+e.namaInstansi+'</p><p class="mb-0 fw-bold"><i class="fa-regular fa-truck-medical text-primary"></i> '+e.namaDriver+' <span class="badge text-bg-secondary">'+e.platNomor+'</span></p><p class="mb-1 text-muted"><i class="fa-regular fa-square-phone text-success"></i> '+e.kontakPicAmbulance+'</p><p class="mb-0 text-center"><small>'+distance+' km</small></p>';
+        
+        L.marker([e.geopoint._latitude, e.geopoint._longitude], {
+          icon: ambulanceIcon,
+        }).bindPopup(popUp).addTo(ambulancesMarkers);
+      }
+    });
+  });
 }
 
-function showAmbulances(data) {
-  data.forEach((e, i) => {
-    const ambulancesMarker = [];
-    const distance = map.distance(markerA.getLatLng(), [e.geopoint._latitude, e.geopoint._longitude]);
-    if (distance <= 10000) {
-      const popUp = '<p class="mb-1 fw-bold fs-6 text-center">'+e.namaInstansi+'</p><p class="mb-0 fw-bold"><i class="fa-regular fa-truck-medical text-primary"></i> '+e.namaDriver+' <span class="badge text-bg-secondary">'+e.platNomor+'</span></p><p class="mb-1 text-muted"><i class="fa-regular fa-square-phone text-success"></i> '+e.kontakPicAmbulance+'</p><p class="mb-0 text-center"><small>'+(distance/1000).toFixed(2)+' km</small></p>';
-      
-      ambulancesMarker[i] = L.marker([e.geopoint._latitude, e.geopoint._longitude], {
-        icon: ambulanceIcon,
-      }).addTo(map).bindPopup(popUp);
-    }
-    // console.log(ambulancesMarker);
-  });
+function refreshMap() {
+  calculateDistance(markerA.getLatLng().lat, markerA.getLatLng().lng, markerB.getLatLng().lat, markerB.getLatLng().lng)
+  showAmbulancesInRadius();
 }
