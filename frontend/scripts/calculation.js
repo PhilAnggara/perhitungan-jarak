@@ -65,7 +65,28 @@ function accuracy(lat1, lon1, lat2, lon2) {
   const sphericalAccuracy = (b / d) * 100;
   const haversineAccuracy = (c / d) * 100;
 
-  document.getElementById('euclideanAccuracy').value = euclideanAccuracy.toFixed(2) + ' %';
-  document.getElementById('sphericalAccuracy').value = sphericalAccuracy.toFixed(2) + ' %';
-  document.getElementById('haversineAccuracy').value = haversineAccuracy.toFixed(2) + ' %';
+  console.clear();
+  console.log('euclidean: ' + a/1000 + ' km');
+  console.log('spherical: ' + b/1000 + ' km');
+  console.log('haversine: ' + c/1000 + ' km');
+  console.log('leaflet: ' + d/1000 + ' km');
+  console.log('');
+  console.log('akurasi euclidean : ');
+  console.log('(' + d/1000 + ' / ' + a/1000 + ') * 100 = ' + euclideanAccuracy.toFixed(2) + ' %');
+  console.log('');
+  console.log('akurasi spherical : ');
+  console.log('(' + d/1000 + ' / ' + b/1000 + ') * 100 = ' + sphericalAccuracy.toFixed(2) + ' %');
+  console.log('');
+  console.log('akurasi haversine : ');
+  console.log('(' + d/1000 + ' / ' + c/1000 + ') * 100 = ' + haversineAccuracy.toFixed(2) + ' %');
+  
+  if (document.getElementById('euclideanAccuracy')) {
+    document.getElementById('euclideanAccuracy').value = euclideanAccuracy.toFixed(2) + ' %';
+  }
+  if (document.getElementById('sphericalAccuracy')) {
+    document.getElementById('sphericalAccuracy').value = sphericalAccuracy.toFixed(2) + ' %';
+  }
+  if (document.getElementById('haversineAccuracy')) {
+    document.getElementById('haversineAccuracy').value = haversineAccuracy.toFixed(2) + ' %';
+  }
 }
